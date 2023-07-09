@@ -7,6 +7,7 @@ const ForbiddenError = require('../errors/ForbiddenError');
 const getMovies = (req, res, next) => {
   Movie.find()
     .populate(['owner'])
+    .sort({ createdAt: -1 })
     .then((movies) => {
       res.status(200).send(movies);
     })
@@ -52,9 +53,9 @@ const deleteMovie = (req, res, next) => {
   Movie.findById(req.params.movieId)
     .orFail(() => new NotFoundError('Карточка не найдена'))
     .then((movie) => {
-      if (!movie) {
-        throw new NotFoundError('Такой карточки нет');
-      }
+      // if (!movie) {
+      //   throw new NotFoundError('Такой карточки нет');
+      // }
       if (`${movie.owner}` !== req.user._id) {
         throw new ForbiddenError('Нет доступа на удаление карточки');
       }
