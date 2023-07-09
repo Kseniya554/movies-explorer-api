@@ -50,7 +50,7 @@ const createMovie = (req, res, next) => {
 
 const deleteMovie = (req, res, next) => {
   Movie.findById(req.params.movieId)
-    // .orFail(() => new NotFoundError('Карточка не найдена'))
+    .orFail(() => new NotFoundError('Карточка не найдена'))
     .then((movie) => {
       if (!movie) {
         throw new NotFoundError('Такой карточки нет');
@@ -58,7 +58,7 @@ const deleteMovie = (req, res, next) => {
       if (`${movie.owner}` !== req.user._id) {
         throw new ForbiddenError('Нет доступа на удаление карточки');
       }
-      return Movie.findByIdAndDelete()
+      return movie.deleteOne()
         .then(() => res.status(200).send(movie));
     })
     .catch((err) => {
