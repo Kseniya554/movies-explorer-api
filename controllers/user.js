@@ -64,7 +64,7 @@ const updateUser = (req, res, next) => {
         next(new BadRequestError('Неверно заполнены поля'));
         return;
       }
-      if (err.code === 409) {
+      if (err.code === 11000) {
         next(new ConflictError('Пользователь уже существует'));
         return;
       }
